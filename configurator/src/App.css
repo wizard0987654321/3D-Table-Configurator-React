@@ -1,0 +1,66 @@
+.App {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+
+.sidebar {
+  width: 280px;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: system-ui, sans-serif;
+}
+
+.canvas-wrapper {
+  flex: 1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.price {
+  margin-top: auto;
+  font-weight: bold;
+}
+.App {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+
+.sidebar {
+  width: 280px;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: system-ui, sans-serif;
+}
+
+.canvas-wrapper {
+  flex: 1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.price {
+  margin-top: auto;
+  font-weight: bold;
+}
