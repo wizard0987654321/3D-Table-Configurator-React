@@ -1,7 +1,7 @@
 import './App.css'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import TablePlaceholder from './components/TablePlaceholder.jsx'
+import TablePlaceholder from './components/Tableplaceholder.jsx'
 import { useConfiguratorStore } from './store/useConfiguratorStore'
 
 function Sidebar() {

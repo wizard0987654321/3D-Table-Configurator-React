@@ -37,4 +37,4 @@ function TablePlaceholder() {
     )
 }
 
-export default TablePlaceholder
+export default TablePlaceholder;
