@@ -1,4 +1,10 @@
 # Webframeworks
+Instructions to run locally 
+
+In the webframeworks folder 
+
+npm install
+npm run dev
 
 
 
