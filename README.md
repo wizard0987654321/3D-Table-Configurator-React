@@ -1,9 +1,20 @@
 # Webframeworks
 Instructions to run locally 
 
-In the webframeworks folder 
-
+# In the parent folder of configurator and backend 
 npm install
+
+# For Frontend
+cd configurator
+npm install
+cd ..
+
+# For Backend
+cd backend
+npm install
+cd ..
+
+# In the parent folder of configurator and backend
 npm run dev
 
 
