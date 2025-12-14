@@ -4,6 +4,13 @@
   height: 100vh;
   margin: 0;
 }
+/* Make the container fill the screen and sit side-by-side */
+.configurator-layout {
+  display: flex; /* This aligns children in a row */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 
 .sidebar {
   width: 280px;
