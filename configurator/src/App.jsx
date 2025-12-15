@@ -7,10 +7,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Route 1: The Login Page (Default) */}
+        {/*route 1: login/register page (default) */}
         <Route path="/" element={<Authentication />} />
 
-        {/* Route 2: The Actual Configurator */}
+        {/*route 2: configurator */}
         <Route path="/design" element={<ConfiguratorScene />} />
       </Routes>
     </BrowserRouter>

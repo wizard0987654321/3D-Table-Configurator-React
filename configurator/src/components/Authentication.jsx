@@ -2,26 +2,29 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Authentication() {
+
+    // to change route
     const navigate = useNavigate();
     
-    // State for inputs
+    // state for input fields
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     
-    // State to toggle between Login and Register view
+    // state that controlls whether login or register field is showed
     const [isRegistering, setIsRegistering] = useState(false);
     
-    // State for error messages
+    // state for error messages to show them dynamically
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Stop page refresh
         setError(''); // Clear previous errors
 
-        // Decide which endpoint to hit
+        // ternary operator to choose endpoint based on mode
         const endpoint = isRegistering ? '/api/register' : '/api/login';
         const url = `http://localhost:3000${endpoint}`;
 
+        // for both, register and login, send username and password as a request
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -33,10 +36,10 @@ function Authentication() {
 
             if (!response.ok) {
                 // If server sent an error (like "User already exists")
-                throw new Error(data.error || 'Something went wrong');
+                throw new Error(data.error || 'Something went wrong, user already exists.');
             }
 
-            // Success!
+            // if response is ok, check if registering or logging in
             if (isRegistering) {
                 alert("Registration successful! Please log in.");
                 setIsRegistering(false); // Switch to login mode
@@ -44,7 +47,7 @@ function Authentication() {
                 // Login successful
                 console.log("Logged in user:", data.user);
                 
-                // OPTIONAL: Save user ID to localStorage so we know who is logged in
+                // saving in localstorage so after refresh page is not lost immediately
                 localStorage.setItem('userId', data.user.id);
                 localStorage.setItem('username', data.user.username);
                 
@@ -56,6 +59,7 @@ function Authentication() {
         }
     };
 
+    // JSX for the component
     return (
         <div style={{ padding: '50px', textAlign: 'center' }}>
             <h1>Welcome to the Configurator</h1>
