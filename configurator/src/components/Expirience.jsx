@@ -1,4 +1,4 @@
-// src/components/Expirience.jsx
+// src/components/Expirience.jsxy
 import {Box, PresentationControls, Stage} from '@react-three/drei'
 
 function Expirience() {
