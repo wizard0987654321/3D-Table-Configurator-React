@@ -15,6 +15,7 @@ function Sidebar() {
     const legColor = useConfiguratorStore((s) => s.legColor)
     const topMaterial = useConfiguratorStore((s) => s.topMaterial)
     const legMaterial = useConfiguratorStore((s) => s.legMaterial)
+    const legType = useConfiguratorStore((s) => s.legType)
 
     return (
         <div className="sidebar">
@@ -59,6 +60,14 @@ function Sidebar() {
                 <select value={legMaterial} onChange={(e) => setField('legMaterial', e.target.value)}>
                     <option value="metal">Metall</option>
                     <option value="wood">Holz</option>
+                </select>
+            </label>
+            <label>
+                Bein-Typ
+                <select value={legType} onChange={(e) => setField('legType', e.target.value)}>
+                    <option value="square">Vierkant</option>
+                    <option value="round">Rund</option>
+                    <option value="uFrame">U-/Rahmen</option>
                 </select>
             </label>
             <div className="price">Preis: {price} €</div>

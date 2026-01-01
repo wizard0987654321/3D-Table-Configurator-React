@@ -6,6 +6,7 @@ export const useConfiguratorStore = create((set, get) => ({
     legColor: '#555555',
     topMaterial: 'wood', // 'wood' | 'plastic' | 'glass'
     legMaterial: 'metal', // 'metal' | 'wood'
+    legType: 'square', // 'square' | 'round' | 'uFrame'
 
     width: 120,
     height: 75,
@@ -14,7 +15,7 @@ export const useConfiguratorStore = create((set, get) => ({
     setField: (key, value) => set({ [key]: value }),
 
     getPrice: () => {
-        const { width, depth, height, topMaterial, legMaterial } = get()
+        const { width, depth, height, topMaterial, legMaterial,legType } = get()
         let price = 150
         price *= (width * depth) / (120 * 80)
         if (height > 75) price += 50
@@ -23,6 +24,8 @@ export const useConfiguratorStore = create((set, get) => ({
         if (topMaterial === 'glass') price += 80
         if (topMaterial === 'wood') price += 40
         if (legMaterial === 'wood') price += 20
+        if (legType === 'uFrame') price += 60 // Beispiel-Aufpreis
+
 
         return Math.round(price)
     },
