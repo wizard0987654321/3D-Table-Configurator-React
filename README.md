@@ -1,25 +1,30 @@
 # Webframeworks
 Instructions to run locally 
 
-# In the parent folder of configurator and backend 
-npm install
+## 🚀 Getting Started
 
-# For Frontend
-cd configurator
-npm install
-cd ..
+### 1. Prerequisites
+* Install [Node.js](https://nodejs.org/)
+* Install [PostgreSQL](https://www.postgresql.org/)
 
-# For Backend
-cd backend
-npm install
-cd ..
+### 2. Database Setup
+1. Open your PostgreSQL tool (pgAdmin or psql).
+2. Create a new database named `configurator_db`.
+3. (Optional) The tables will be created automatically when the backend starts.
 
-# In the parent folder of configurator and backend
-npm run dev
+### 3. Backend Setup
+1. Navigate to the `backend` folder: `cd backend`
+2. Install dependencies: `npm install`
+3. Create a `.env` file in the `backend` folder and add your credentials:
+   ```env
+   DB_USER=postgres
+   DB_HOST=localhost
+   DB_NAME=configurator_db
+   DB_PASSWORD=YOUR_POSTGRES_PASSWORD
+   DB_PORT=5432
+   PORT=3000
 
-
-
-## Getting started
+## Intro
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 

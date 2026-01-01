@@ -42,7 +42,7 @@ function Authentication() {
             // if response is ok, check if registering or logging in
             if (isRegistering) {
                 alert("Registration successful! Please log in.");
-                setIsRegistering(false); // Switch to login mode
+                setIsRegistering(false); // switch to login mode
             } else {
                 // Login successful
                 console.log("Logged in user:", data.user);

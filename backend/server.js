@@ -1,101 +1,220 @@
 // backend/server.js
-import express from 'express';
-import cors from 'cors';
-import sqlite3 from 'sqlite3';
 
-// port and express app setup
+import express from 'express';
+
+import cors from 'cors';
+
+import pkg from 'pg'; // Import the pg library
+
+const { Pool } = pkg; // Extract Pool from the package
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 const app = express();
+
 const port = 3000;
 
-// preparing app for communication with frontend
+
+// Middleware
 
 app.use(cors());
+
 app.use(express.json());
 
-// connect to SQLite
-// this creates a file 'database.sqlite' automatically if it doesn't exist, sqlite does not need separate server to run
 
-const db = new sqlite3.Database('./database.sqlite', (err) => {
+// 1. Connect to PostgreSQL
+
+// You must replace these values with your actual Postgres installation details
+
+const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+});
+
+
+// Test connection immediately
+
+pool.connect((err, client, release) => {
+
     if (err) {
-        console.error('Error opening database:', err.message);
-    } else {
-        console.log('✅ Connected to SQLite database.');
+
+        return console.error('Error acquiring client', err.stack);
+
     }
+
+    console.log('✅ Connected to PostgreSQL database.');
+
+    release();
+
 });
 
-// create Tables (Run this every time server starts to ensure they exist)
-db.serialize(() => {
-    // users table
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE,
-        password TEXT
-    )`);
 
-    // saved configurations table
-    db.run(`CREATE TABLE IF NOT EXISTS configurations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        config_name TEXT,
-        config_data TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(user_id) REFERENCES users(id)
-    )`);
-});
+// 2. Create Tables (Run this every time server starts)
 
-// test route, for detecting that server was succesfully connected
+const createTables = async () => {
+
+    try {
+
+        // Users Table
+
+        // CHANGE: 'INTEGER PRIMARY KEY AUTOINCREMENT' -> 'SERIAL PRIMARY KEY'
+
+        await pool.query(`
+
+            CREATE TABLE IF NOT EXISTS users (
+
+                id SERIAL PRIMARY KEY,
+
+                username VARCHAR(255) UNIQUE NOT NULL,
+
+                password TEXT NOT NULL
+
+            );
+
+        `);
+
+
+        // Configurations Table
+
+        // CHANGE: Postgres handles timestamps slightly differently, but CURRENT_TIMESTAMP is standard
+
+        await pool.query(`
+
+            CREATE TABLE IF NOT EXISTS configurations (
+
+                id SERIAL PRIMARY KEY,
+
+                user_id INTEGER REFERENCES users(id),
+
+                config_name TEXT,
+
+                config_data TEXT,
+
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+            );
+
+        `);
+
+        console.log("✅ Tables checked/created.");
+
+    } catch (err) {
+
+        console.error("Error creating tables:", err);
+
+    }
+
+};
+
+
+createTables();
+
+
+// 3. Test Route
+
 app.get('/api/test', (req, res) => {
-    res.json({ message: "Backend is connected and working!" });
+
+    res.json({ message: "Backend is connected to Postgres!" });
+
 });
 
-// register endpoint
 
-app.post('/api/register', (req, res) => {
+// 1. REGISTER Endpoint
+
+app.post('/api/register', async (req, res) => {
+
     const { username, password } = req.body;
+
 
     if (!username || !password) {
+
         return res.status(400).json({ error: "Username and password are required" });
+
     }
 
-    // insert user into database (password not crypted, to do)
-    const sql = `INSERT INTO users (username, password) VALUES (?, ?)`;
-    
-    db.run(sql, [username, password], function(err) {
-        if (err) {
-            // Error code 19 is "Constraint Violation" (Duplicate username)
-            if (err.errno === 19) { 
-                return res.status(400).json({ error: "Username already exists." });
-            }
-            return res.status(500).json({ error: err.message });
+
+    // CHANGE: Placeholders are $1, $2 instead of ?
+
+    // CHANGE: Added 'RETURNING id' to get the new ID back immediately
+
+    const sql = `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id`;
+
+
+    try {
+
+        const result = await pool.query(sql, [username, password]);
+
+        res.json({ message: "User created successfully", userId: result.rows[0].id });
+
+    } catch (err) {
+
+        // CHANGE: Error code '23505' is Postgres for "Unique Violation"
+
+        if (err.code === '23505') {
+
+            return res.status(400).json({ error: "Username already exists." });
+
         }
-        res.json({ message: "User created successfully", userId: this.lastID });
-    });
+
+        return res.status(500).json({ error: err.message });
+
+    }
+
 });
 
-// 2. login endpoint
-app.post('/api/login', (req, res) => {
+
+// 2. LOGIN Endpoint
+
+app.post('/api/login', async (req, res) => {
+
     const { username, password } = req.body;
 
-    const sql = `SELECT * FROM users WHERE username = ? AND password = ?`;
-    
-    db.get(sql, [username, password], (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (row) {
-            // User found!
-            res.json({ 
-                message: "Login successful", 
-                user: { id: row.id, username: row.username } 
+
+    const sql = `SELECT * FROM users WHERE username = $1 AND password = $2`;
+
+
+    try {
+
+        const result = await pool.query(sql, [username, password]);
+
+
+
+        if (result.rows.length > 0) {
+
+            const user = result.rows[0];
+
+            res.json({
+
+                message: "Login successful",
+
+                user: { id: user.id, username: user.username }
+
             });
+
         } else {
-            // No user found with that combo
+
             res.status(401).json({ error: "Invalid username or password" });
+
         }
-    });
+
+    } catch (err) {
+
+        res.status(500).json({ error: err.message });
+
+    }
+
 });
 
-// start server with console message
+
+// 4. Start Server
+
 app.listen(port, () => {
+
     console.log(`🚀 Server running at http://localhost:${port}`);
-});
+
+}); 
