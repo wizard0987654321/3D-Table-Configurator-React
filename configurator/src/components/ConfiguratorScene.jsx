@@ -21,6 +21,8 @@ function Sidebar() {
     const setField = useConfiguratorStore((s) => s.setField)
     const price = useConfiguratorStore((s) => s.getPrice())
 
+    const saveConfig = useConfiguratorStore((s) => s.saveConfiguration);
+
     const isRound = plateShape === 'round'
 
     // Option 3: deaktivieren (Beispielregel für dünne Platte)
@@ -183,7 +185,12 @@ function Sidebar() {
 
             <div className="price">Preis: {price} €</div>
 
-            <button style={{ marginTop: '20px' }}>Save Config</button>
+            <button 
+            className="save-btn" 
+            onClick={saveConfig}
+        >
+            Save Configuration
+        </button>
         </div>
     )
 }

@@ -1,0 +1,26 @@
+# 1. Dependencies
+# We ignore this because it's huge. Users install these themselves using 'npm install'.
+node_modules/
+
+# 2. Security / Secrets
+# NEVER upload this. This contains your passwords.
+.env
+
+# 3. Logs
+# Error logs that appear when things crash. We don't need these in Git.
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# 4. OS / Editor Junk
+# Files created by Mac/Windows/VS Code that clutter the repo.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

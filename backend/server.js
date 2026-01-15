@@ -138,9 +138,9 @@ app.post('/api/register', async (req, res) => {
     }
 
 
-    // CHANGE: Placeholders are $1, $2 instead of ?
 
-    // CHANGE: Added 'RETURNING id' to get the new ID back immediately
+    // Here saving password as a string, but generally it must be hashed, for the uni project, only for testing purposes
+
 
     const sql = `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id`;
 
@@ -208,6 +208,39 @@ app.post('/api/login', async (req, res) => {
 
     }
 
+});
+
+app.post('/api/save-config', async (req, res) => {
+    // Destructure every single field from the request body
+    const { 
+        userId, configName, topColor, legColor, topMaterial, 
+        legMaterial, width, height, depth, plateShape, 
+        thicknessCm, legType, totalPrice 
+    } = req.body;
+
+    const sql = `
+        INSERT INTO configurations (
+            user_id, config_name, top_color, leg_color, top_material, 
+            leg_material, width, height, depth, plate_shape, 
+            thickness_cm, leg_type, total_price
+        ) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
+        RETURNING id
+    `;
+
+    const values = [
+        userId, configName, topColor, legColor, topMaterial, 
+        legMaterial, width, height, depth, plateShape, 
+        thicknessCm, legType, totalPrice
+    ];
+
+    try {
+        const result = await pool.query(sql, values);
+        res.json({ message: "Configuration saved into columns!", id: result.rows[0].id });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to save detailed configuration" });
+    }
 });
 
 
