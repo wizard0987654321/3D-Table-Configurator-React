@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
 import TablePlaceholder from './TablePlaceholder.jsx'
 import { useConfiguratorStore } from '../store/useConfiguratorStore'
+import ProfileIcon from './ProfileIcon.jsx'
 import '../App.css'
 
 function Sidebar() {
@@ -18,6 +19,7 @@ function Sidebar() {
     const thicknessCm = useConfiguratorStore((s) => s.thicknessCm)
     const legType = useConfiguratorStore((s) => s.legType)
 
+    const configName = useConfiguratorStore((s) => s.configName);
     const setField = useConfiguratorStore((s) => s.setField)
     const price = useConfiguratorStore((s) => s.getPrice())
 
@@ -32,6 +34,17 @@ function Sidebar() {
     return (
         <div className="sidebar">
             <h2>Tisch-Konfigurator</h2>
+
+            <label className="config-name-label">
+                Name
+                <input 
+                    type="text" 
+                    placeholder="Mein Tisch" // Placeholder shows when empty
+                    className="config-name-input"
+                    value={configName} // Always use the store value
+                    onChange={(e) => setField('configName', e.target.value)} // Update store on change
+                />
+            </label>
 
             <label>
                 Plattenform
@@ -216,6 +229,7 @@ function ConfiguratorScene() {
                 </Canvas>
 
             </div>
+            <ProfileIcon />
         </div>
     )
 }

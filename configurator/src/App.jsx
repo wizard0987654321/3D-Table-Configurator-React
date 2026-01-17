@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Authentication from './components/Authentication';
 import ConfiguratorScene from './components/ConfiguratorScene';
+import SavedConfigurations from './components/SavedConfigurations';
 
 function App() {
   return (
@@ -12,6 +13,8 @@ function App() {
 
         {/*route 2: configurator */}
         <Route path="/design" element={<ConfiguratorScene />} />
+
+        <Route path="/saved-configurations" element={<SavedConfigurations />} />
       </Routes>
     </BrowserRouter>
   );

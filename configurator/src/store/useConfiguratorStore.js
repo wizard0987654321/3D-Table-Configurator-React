@@ -17,6 +17,9 @@ export const useConfiguratorStore = create((set, get) => ({
     thicknessCm: 4,
     legType: 'square',
 
+    // State for the Configuration Name
+    configName: '', 
+
     // 4. Action: Update fields
     setField: (key, value) => set({ [key]: value }),
 
@@ -25,7 +28,6 @@ export const useConfiguratorStore = create((set, get) => ({
         const { width, depth, height, topMaterial, legMaterial, legType, thicknessCm } = get()
         
         let price = 150;
-        // Price formula: $$Price_{total} = Price_{base} \cdot \left(\frac{width \cdot depth}{120 \cdot 80}\right) + \text{Add-ons}$$
         price *= (width * depth) / (120 * 80);
 
         if (height > 75) price += 50;
@@ -40,40 +42,49 @@ export const useConfiguratorStore = create((set, get) => ({
         return Math.round(price);
     },
 
-    // 6. Action: Save to Database (ADD THIS HERE)
+    // 6. Action: Save to Database
     saveConfiguration: async () => {
-    const state = get();
-    const userId = localStorage.getItem('userId');
+        const state = get();
+        const userId = localStorage.getItem('userId');
 
-    if (!userId) return alert("Please log in!");
+        if (!userId) {
+            alert("Please log in to save your design!");
+            return;
+        }
 
-    // Construct the flat object
-    const payload = {
-        userId: userId,
-        configName: `Table ${new Date().toLocaleDateString()}`,
-        topColor: state.topColor,
-        legColor: state.legColor,
-        topMaterial: state.topMaterial,
-        legMaterial: state.legMaterial,
-        width: state.width,
-        height: state.height,
-        depth: state.depth,
-        plateShape: state.plateShape,
-        thicknessCm: state.thicknessCm,
-        legType: state.legType,
-        totalPrice: state.getPrice()
-    };
+        // Construct the flat object exactly matching your Backend destructuring
+        const payload = {
+            userId: userId,
+            configName: state.configName, // Takes the current value from the input field
+            topColor: state.topColor,
+            legColor: state.legColor,
+            topMaterial: state.topMaterial,
+            legMaterial: state.legMaterial,
+            width: state.width,
+            height: state.height,
+            depth: state.depth,
+            plateShape: state.plateShape,
+            thicknessCm: state.thicknessCm,
+            legType: state.legType,
+            totalPrice: state.getPrice()
+        };
 
-    try {
-        const response = await fetch('http://localhost:3000/api/save-config', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload), // Send the flat object
-        });
+        try {
+            const response = await fetch('http://localhost:3000/api/save-config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload), 
+            });
 
-        if (response.ok) alert("Saved successfully into columns!");
-    } catch (err) {
-        console.error("Save error:", err);
+            if (response.ok) {
+                alert(`Saved "${state.configName}" successfully!`);
+            } else {
+                const errorData = await response.json();
+                alert("Error: " + errorData.error);
+            }
+        } catch (err) {
+            console.error("Save error:", err);
+            alert("Could not connect to server.");
+        }
     }
-}
 }))

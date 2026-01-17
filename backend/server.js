@@ -147,6 +147,25 @@ app.post('/api/save-config', async (req, res) => {
     }
 });
 
+app.get('/api/user-configs/:userId', async (req, res) => {
+    const { userId } = req.params; // This grabs the "1" from the URL
+
+    try {
+        const sql = `
+            SELECT * FROM configurations 
+            WHERE user_id = $1 
+            ORDER BY created_at DESC
+        `;
+        const result = await pool.query(sql, [userId]);
+        
+        // Even if the list is empty, we send an empty array []
+        res.json(result.rows); 
+    } catch (err) {
+        console.error("Database Error:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 // 4. Start Server
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);

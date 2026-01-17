@@ -67,6 +67,39 @@ select {
   cursor: pointer;
 }
 
+.config-name-label {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Minimalistic Input Field */
+.config-name-input {
+    margin-top: 5px;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    color: #444;
+}
+
+/* Subtle focus effect */
+.config-name-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    background-color: #fff;
+}
+
+/* Styling the placeholder text */
+.config-name-input::placeholder {
+    color: #bbb;
+    font-style: italic;
+    font-size: 13px;
+}
+
 small {
   color: #888;
   line-height: 1.3;
@@ -113,4 +146,73 @@ small {
   height: 100vh;
   background-color: #f0f0f0;
   position: relative;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.config-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.config-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 10px;
+}
+
+.price-badge {
+    background: #e7f3ff;
+    color: #007bff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.card-details p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.date {
+    font-size: 0.8rem !important;
+    opacity: 0.6;
+    margin-top: 15px !important;
+}
+
+.load-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.back-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
