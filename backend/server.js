@@ -182,6 +182,32 @@ app.delete('/api/delete-config/:configId', async (req, res) => {
     }
 });
 
+app.put('/api/update-config/:id', async (req, res) => {
+    const { id } = req.params;
+    const { 
+        configName, topColor, legColor, topMaterial, legMaterial, 
+        width, height, depth, plateShape, thicknessCm, legType, totalPrice 
+    } = req.body;
+
+    const sql = `
+        UPDATE configurations 
+        SET config_name = $1, top_color = $2, leg_color = $3, top_material = $4, 
+            leg_material = $5, width = $6, height = $7, depth = $8, 
+            plate_shape = $9, thickness_cm = $10, leg_type = $11, total_price = $12
+        WHERE id = $13
+    `;
+
+    try {
+        await pool.query(sql, [
+            configName, topColor, legColor, topMaterial, legMaterial, 
+            width, height, depth, plateShape, thicknessCm, legType, totalPrice, id
+        ]);
+        res.json({ message: "Updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: "Update failed" });
+    }
+});
+
 // 4. Start Server
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);

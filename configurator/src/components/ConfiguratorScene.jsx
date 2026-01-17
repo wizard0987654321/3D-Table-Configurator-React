@@ -23,7 +23,9 @@ function Sidebar() {
     const setField = useConfiguratorStore((s) => s.setField)
     const price = useConfiguratorStore((s) => s.getPrice())
 
+    const editingId = useConfiguratorStore((s) => s.editingId);
     const saveConfig = useConfiguratorStore((s) => s.saveConfiguration);
+    const updateConfig = useConfiguratorStore((s) => s.updateConfiguration);
 
     const isRound = plateShape === 'round'
 
@@ -37,8 +39,8 @@ function Sidebar() {
 
             <label className="config-name-label">
                 Name
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     placeholder="Mein Tisch" // Placeholder shows when empty
                     className="config-name-input"
                     value={configName} // Always use the store value
@@ -198,12 +200,22 @@ function Sidebar() {
 
             <div className="price">Preis: {price} €</div>
 
-            <button 
-            className="save-btn" 
-            onClick={saveConfig}
-        >
-            Save Configuration
-        </button>
+            <button
+                className="save-btn"
+                onClick={saveConfig}
+            >
+                Save Configuration
+            </button>
+
+            {editingId && (
+                <button 
+                    className="update-btn" 
+                    onClick={updateConfig}
+                    style={{ backgroundColor: '#ff9800', color: 'white' }}
+                >
+                    Save Changes to Existing
+                </button>
+            )}
         </div>
     )
 }

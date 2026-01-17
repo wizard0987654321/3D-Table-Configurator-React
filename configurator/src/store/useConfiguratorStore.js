@@ -1,6 +1,9 @@
 import { create } from 'zustand'
 
 export const useConfiguratorStore = create((set, get) => ({
+    // id to identify if we are in editing mode
+    editingId: null,
+
     // 1. State: Colors & Materials
     topColor: '#6c8bff',
     legColor: '#555555',
@@ -90,6 +93,7 @@ export const useConfiguratorStore = create((set, get) => ({
 
 loadConfiguration: (config) => {
     set({
+        editingId: config.id,
         configName: config.config_name,
         topColor: config.top_color,
         legColor: config.leg_color,
@@ -107,6 +111,7 @@ loadConfiguration: (config) => {
 // when user clicks on new design, reset to defaults
 resetToDefault: () => {
     set({
+        editingId: null,
         configName: '',
         topColor: '#6c8bff',
         legColor: '#555555',
@@ -117,6 +122,36 @@ resetToDefault: () => {
         thicknessCm: 4,
         legType: 'square'
     });
-}
+},
+
+updateConfiguration: async () => {
+        const state = get();
+        const payload = {
+            configName: state.configName,
+            topColor: state.topColor,
+            legColor: state.legColor,
+            topMaterial: state.topMaterial,
+            legMaterial: state.legMaterial,
+            width: state.width,
+            height: state.height,
+            depth: state.depth,
+            plateShape: state.plateShape,
+            thicknessCm: state.thicknessCm,
+            legType: state.legType,
+            totalPrice: state.getPrice()
+        };
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/update-config/${state.editingId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) alert("Changes saved successfully!");
+        } catch (err) {
+            console.error("Update error:", err);
+        }
+    }
 
 }))
