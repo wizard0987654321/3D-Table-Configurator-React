@@ -86,5 +86,37 @@ export const useConfiguratorStore = create((set, get) => ({
             console.error("Save error:", err);
             alert("Could not connect to server.");
         }
-    }
+    },
+
+loadConfiguration: (config) => {
+    set({
+        configName: config.config_name,
+        topColor: config.top_color,
+        legColor: config.leg_color,
+        topMaterial: config.top_material,
+        legMaterial: config.leg_material,
+        width: config.width,
+        height: config.height,
+        depth: config.depth,
+        plateShape: config.plate_shape,
+        thicknessCm: config.thickness_cm,
+        legType: config.leg_type
+    });
+},
+
+// when user clicks on new design, reset to defaults
+resetToDefault: () => {
+    set({
+        configName: '',
+        topColor: '#6c8bff',
+        legColor: '#555555',
+        width: 120,
+        height: 75,
+        depth: 80,
+        plateShape: 'rect',
+        thicknessCm: 4,
+        legType: 'square'
+    });
+}
+
 }))

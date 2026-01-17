@@ -166,6 +166,22 @@ app.get('/api/user-configs/:userId', async (req, res) => {
     }
 });
 
+app.delete('/api/delete-config/:configId', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query('DELETE FROM configurations WHERE id = $1', [id]);
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Configuration not found" });
+        }
+
+        res.json({ message: "Successfully deleted configuration" });
+    } catch (err) {
+        console.error("Delete Error:", err);
+        res.status(500).json({ error: "Failed to delete configuration" });
+    }
+});
+
 // 4. Start Server
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);

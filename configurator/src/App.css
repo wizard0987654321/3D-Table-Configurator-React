@@ -216,3 +216,26 @@ small {
     border-radius: 6px;
     cursor: pointer;
 }
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.card-actions button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.edit-btn { background: #eee; color: #333; }
+.order-btn { background: #28a745; color: white; }
+.delete-btn { background: #fff; color: #dc3545; border: 1px solid #dc3545 !important; }
+
+.edit-btn:hover { background: #ddd; }
+.order-btn:hover { background: #218838; }
