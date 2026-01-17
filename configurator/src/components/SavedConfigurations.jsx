@@ -39,7 +39,7 @@ export default function SavedConfigurations() {
     }
 
     function handleOrder(config) {
-        alert(`Bestellung für "${config.config_name}" mit Preis ${config.total_price} € wurde aufgenommen!`);
+        navigate('/checkout');
     }
 
     async function handleDelete(configId) {
