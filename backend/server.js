@@ -117,25 +117,25 @@ app.post('/api/login', async (req, res) => {
 // SAVE CONFIGURATION Endpoint
 app.post('/api/save-config', async (req, res) => {
     const { 
-        userId, configName, topColor, legColor, topMaterial, 
-        legMaterial, width, height, depth, plateShape, 
-        thicknessCm, legType, totalPrice 
-    } = req.body;
+    userId, configName, topColor, legColor, topMaterial, 
+    legMaterial, width, height, depth, plateShape, 
+    thicknessCm, legType, totalPrice, topTexture // <--- ADD THIS
+} = req.body;
 
     const sql = `
-        INSERT INTO configurations (
-            user_id, config_name, top_color, leg_color, top_material, 
-            leg_material, width, height, depth, plate_shape, 
-            thickness_cm, leg_type, total_price
-        ) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
-        RETURNING id
-    `;
+    INSERT INTO configurations (
+        user_id, config_name, top_color, leg_color, top_material, 
+        leg_material, width, height, depth, plate_shape, 
+        thickness_cm, leg_type, total_price, top_texture 
+    ) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) 
+    RETURNING id
+`;
 
     const values = [
         userId, configName, topColor, legColor, topMaterial, 
         legMaterial, width, height, depth, plateShape, 
-        thicknessCm, legType, totalPrice
+        thicknessCm, legType, totalPrice, topTexture
     ];
 
     try {
@@ -166,7 +166,7 @@ app.get('/api/user-configs/:userId', async (req, res) => {
     }
 });
 
-app.delete('/api/delete-config/:configId', async (req, res) => {
+app.delete('/api/delete-config/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query('DELETE FROM configurations WHERE id = $1', [id]);
@@ -185,23 +185,23 @@ app.delete('/api/delete-config/:configId', async (req, res) => {
 app.put('/api/update-config/:id', async (req, res) => {
     const { id } = req.params;
     const { 
-        configName, topColor, legColor, topMaterial, legMaterial, 
-        width, height, depth, plateShape, thicknessCm, legType, totalPrice 
-    } = req.body;
+    configName, topColor, legColor, topMaterial, legMaterial, 
+    width, height, depth, plateShape, thicknessCm, legType, totalPrice, topTexture // <--- ADD THIS
+} = req.body;
 
     const sql = `
-        UPDATE configurations 
-        SET config_name = $1, top_color = $2, leg_color = $3, top_material = $4, 
-            leg_material = $5, width = $6, height = $7, depth = $8, 
-            plate_shape = $9, thickness_cm = $10, leg_type = $11, total_price = $12
-        WHERE id = $13
-    `;
+    UPDATE configurations 
+    SET config_name = $1, top_color = $2, leg_color = $3, top_material = $4, 
+        leg_material = $5, width = $6, height = $7, depth = $8, 
+        plate_shape = $9, thickness_cm = $10, leg_type = $11, total_price = $12, top_texture = $13
+    WHERE id = $14
+`;
 
     try {
         await pool.query(sql, [
-            configName, topColor, legColor, topMaterial, legMaterial, 
-            width, height, depth, plateShape, thicknessCm, legType, totalPrice, id
-        ]);
+    configName, topColor, legColor, topMaterial, legMaterial, 
+    width, height, depth, plateShape, thicknessCm, legType, totalPrice, topTexture, id
+]);
         res.json({ message: "Updated successfully" });
     } catch (err) {
         res.status(500).json({ error: "Update failed" });

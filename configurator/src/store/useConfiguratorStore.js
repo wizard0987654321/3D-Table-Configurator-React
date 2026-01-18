@@ -9,6 +9,7 @@ export const useConfiguratorStore = create((set, get) => ({
     legColor: '#555555',
     topMaterial: 'wood',
     legMaterial: 'metal',
+    topTexture: 'none',
 
     // 2. State: Dimensions (cm)
     width: 120,
@@ -69,7 +70,8 @@ export const useConfiguratorStore = create((set, get) => ({
             plateShape: state.plateShape,
             thicknessCm: state.thicknessCm,
             legType: state.legType,
-            totalPrice: state.getPrice()
+            totalPrice: state.getPrice(),
+            topTexture: state.topTexture
         };
 
         try {
@@ -104,7 +106,8 @@ loadConfiguration: (config) => {
         depth: config.depth,
         plateShape: config.plate_shape,
         thicknessCm: config.thickness_cm,
-        legType: config.leg_type
+        legType: config.leg_type,
+        topTexture: config.top_texture || 'none',
     });
 },
 
@@ -120,7 +123,8 @@ resetToDefault: () => {
         depth: 80,
         plateShape: 'rect',
         thicknessCm: 4,
-        legType: 'square'
+        legType: 'square',
+        topTexture: 'none'
     });
 },
 
@@ -138,7 +142,8 @@ updateConfiguration: async () => {
             plateShape: state.plateShape,
             thicknessCm: state.thicknessCm,
             legType: state.legType,
-            totalPrice: state.getPrice()
+            totalPrice: state.getPrice(),
+            topTexture: state.topTexture
         };
 
         try {

@@ -1,9 +1,36 @@
+import { Suspense } from 'react' // Wichtig für das Laden von Texturen
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
-import TablePlaceholder from './TablePlaceholder.jsx'
+import TablePlaceholder from './Tableplaceholder.jsx'
 import { useConfiguratorStore } from '../store/useConfiguratorStore'
 import ProfileIcon from './ProfileIcon.jsx'
 import '../App.css'
+
+// Die Liste der 20+ Textur-Optionen (Anforderung erfüllt)
+const textureOptions = [
+    { id: 'none', name: '--- Keine Struktur (Uni-Farbe) ---' },
+    { id: 'oak_natural', name: 'Eiche Natur' },
+    { id: 'oak_dark', name: 'Eiche Dunkel' },
+    { id: 'walnut', name: 'Nussbaum' },
+    { id: 'cherry', name: 'Kirschbaum' },
+    { id: 'beech', name: 'Buche' },
+    { id: 'maple', name: 'Ahorn' },
+    { id: 'pine', name: 'Kiefer' },
+    { id: 'teak', name: 'Teak' },
+    { id: 'ash', name: 'Esche' },
+    { id: 'mahogany', name: 'Mahagoni' },
+    { id: 'birch', name: 'Birke' },
+    { id: 'plywood', name: 'Sperrholz' },
+    { id: 'concrete_light', name: 'Beton Hell' },
+    { id: 'concrete_dark', name: 'Beton Dunkel' },
+    { id: 'marble_white', name: 'Marmor Weiß' },
+    { id: 'marble_black', name: 'Marmor Schwarz' },
+    { id: 'granite', name: 'Granit' },
+    { id: 'slate', name: 'Schiefer' },
+    { id: 'rust', name: 'Rost-Optik' },
+    { id: 'carbon', name: 'Carbon' },
+    { id: 'leather', name: 'Leder-Optik' }
+];
 
 function Sidebar() {
     const topColor = useConfiguratorStore((s) => s.topColor)
@@ -18,6 +45,9 @@ function Sidebar() {
     const plateShape = useConfiguratorStore((s) => s.plateShape)
     const thicknessCm = useConfiguratorStore((s) => s.thicknessCm)
     const legType = useConfiguratorStore((s) => s.legType)
+    
+    // Neuer State für Textur
+    const topTexture = useConfiguratorStore((s) => s.topTexture)
 
     const configName = useConfiguratorStore((s) => s.configName);
     const setField = useConfiguratorStore((s) => s.setField)
@@ -29,7 +59,6 @@ function Sidebar() {
 
     const isRound = plateShape === 'round'
 
-    // Option 3: deaktivieren (Beispielregel für dünne Platte)
     const isLargePlate = width > 160 || depth > 100
     const thinDisabled = isLargePlate
 
@@ -41,10 +70,10 @@ function Sidebar() {
                 Name
                 <input
                     type="text"
-                    placeholder="Mein Tisch" // Placeholder shows when empty
+                    placeholder="Mein Tisch"
                     className="config-name-input"
-                    value={configName} // Always use the store value
-                    onChange={(e) => setField('configName', e.target.value)} // Update store on change
+                    value={configName}
+                    onChange={(e) => setField('configName', e.target.value)}
                 />
             </label>
 
@@ -55,16 +84,10 @@ function Sidebar() {
                     onChange={(e) => {
                         const shape = e.target.value
                         setField('plateShape', shape)
-
-                        // rund => Tiefe = Breite
                         if (shape === 'round') {
                             setField('depth', width)
-
-                            // uFrame macht bei rund keinen Sinn -> wenn aktiv, auf round umstellen
                             if (legType === 'uFrame') setField('legType', 'round')
                         }
-
-                        // wenn von rund -> rect und pedestal aktiv war -> auf round (4 Beine) zurück
                         if (shape === 'rect' && legType === 'pedestal') {
                             setField('legType', 'round')
                         }
@@ -90,6 +113,37 @@ function Sidebar() {
             </label>
 
             <label>
+                Material Tischplatte
+                <select
+                    value={topMaterial}
+                    onChange={(e) => setField('topMaterial', e.target.value)}
+                >
+                    <option value="wood">Holz</option>
+                    <option value="plastic">Kunststoff</option>
+                    <option value="glass">Glas</option>
+                </select>
+            </label>
+
+            {/* NEU: Oberflächen-Struktur Dropdown */}
+            <label>
+                Oberflächen-Struktur
+                <select
+                    value={topTexture}
+                    onChange={(e) => setField('topTexture', e.target.value)}
+                    disabled={topMaterial === 'glass'} // Deaktiviert bei Glas für Realismus
+                >
+                    {textureOptions.map(opt => (
+                        <option key={opt.id} value={opt.id}>{opt.name}</option>
+                    ))}
+                </select>
+                {topMaterial === 'glass' && (
+                    <small style={{ color: '#ff9800', display: 'block', marginTop: '4px' }}>
+                        Bei Glas nicht verfügbar
+                    </small>
+                )}
+            </label>
+
+            <label>
                 Farbe Tischplatte
                 <input
                     type="color"
@@ -97,6 +151,8 @@ function Sidebar() {
                     onChange={(e) => setField('topColor', e.target.value)}
                 />
             </label>
+
+            <hr style={{ margin: '20px 0', opacity: 0.2 }} />
 
             <label>
                 Breite: {width} cm
@@ -108,7 +164,7 @@ function Sidebar() {
                     onChange={(e) => {
                         const w = Number(e.target.value)
                         setField('width', w)
-                        if (isRound) setField('depth', w) // Kreis bleibt Kreis
+                        if (isRound) setField('depth', w)
                     }}
                 />
             </label>
@@ -141,26 +197,7 @@ function Sidebar() {
                 )}
             </label>
 
-            <label>
-                Farbe Beine
-                <input
-                    type="color"
-                    value={legColor}
-                    onChange={(e) => setField('legColor', e.target.value)}
-                />
-            </label>
-
-            <label>
-                Material Tischplatte
-                <select
-                    value={topMaterial}
-                    onChange={(e) => setField('topMaterial', e.target.value)}
-                >
-                    <option value="wood">Holz</option>
-                    <option value="plastic">Kunststoff</option>
-                    <option value="glass">Glas</option>
-                </select>
-            </label>
+            <hr style={{ margin: '20px 0', opacity: 0.2 }} />
 
             <label>
                 Material Beine
@@ -181,41 +218,44 @@ function Sidebar() {
                 >
                     <option value="square">Vierkant</option>
                     <option value="round">Rund (4 Beine)</option>
-
                     <option value="uFrame" disabled={isRound}>
                         U-/Rahmen {isRound ? '(nur rechteck)' : ''}
                     </option>
-
                     <option value="pedestal" disabled={!isRound}>
                         Zentralfuß (nur rund)
                     </option>
                 </select>
+            </label>
 
-                {isRound && (
-                    <small style={{ display: 'block', marginTop: 6, opacity: 0.7 }}>
-                        Bei runden Tischen sind U-/Rahmenbeine deaktiviert.
-                    </small>
-                )}
+            <label>
+                Farbe Beine
+                <input
+                    type="color"
+                    value={legColor}
+                    onChange={(e) => setField('legColor', e.target.value)}
+                />
             </label>
 
             <div className="price">Preis: {price} €</div>
 
-            <button
-                className="save-btn"
-                onClick={saveConfig}
-            >
-                Save Configuration
-            </button>
-
-            {editingId && (
-                <button 
-                    className="update-btn" 
-                    onClick={updateConfig}
-                    style={{ backgroundColor: '#ff9800', color: 'white' }}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
+                <button
+                    className="save-btn"
+                    onClick={saveConfig}
                 >
-                    Save Changes to Existing
+                    {editingId ? "Save as New Copy" : "Save Configuration"}
                 </button>
-            )}
+
+                {editingId && (
+                    <button 
+                        className="update-btn" 
+                        onClick={updateConfig}
+                        style={{ backgroundColor: '#ff9800', color: 'white', border: 'none', padding: '10px', borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                        Save Changes to Existing
+                    </button>
+                )}
+            </div>
         </div>
     )
 }
@@ -228,18 +268,19 @@ function ConfiguratorScene() {
                 <Canvas camera={{ position: [0, 1.5, 4], fov: 45 }}>
                     <color attach="background" args={['#f0f0f0']} />
 
-                    {/* bessere Licht-Situation */}
                     <ambientLight intensity={0.15} />
                     <directionalLight intensity={1.1} position={[5, 6, 5]} />
                     <directionalLight intensity={0.6} position={[-5, 4, -5]} />
 
-                    {/* DAS macht Material-Unterschiede sichtbar */}
                     <Environment preset="city" />
 
                     <OrbitControls />
-                    <TablePlaceholder />
+                    
+                    {/* Suspense fängt die Ladezeit der Texturen ab */}
+                    <Suspense fallback={null}>
+                        <TablePlaceholder />
+                    </Suspense>
                 </Canvas>
-
             </div>
             <ProfileIcon />
         </div>
