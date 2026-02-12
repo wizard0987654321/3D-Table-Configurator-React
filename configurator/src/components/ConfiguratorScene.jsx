@@ -20,15 +20,16 @@ const textureOptions = [
     { id: 'mahogany', name: 'Mahagoni' },
     { id: 'birch', name: 'Birke' },
     { id: 'plywood', name: 'Sperrholz' },
-    { id: 'concrete_light', name: 'Beton Hell' },
-    { id: 'concrete_dark', name: 'Beton Dunkel' },
-    { id: 'marble_white', name: 'Marmor Weiß' },
-    { id: 'marble_black', name: 'Marmor Schwarz' },
-    { id: 'granite', name: 'Granit' },
-    { id: 'slate', name: 'Schiefer' },
-    { id: 'rust', name: 'Rost-Optik' },
-    { id: 'carbon', name: 'Carbon' },
-    { id: 'leather', name: 'Leder-Optik' }
+    { id: 'concrete_light', name: 'Lärche' },
+    { id: 'concrete_dark', name: 'Douglasie' },
+    { id: 'marble_white', name: 'Zeder' },
+    { id: 'marble_black', name: 'Ulme' },
+    { id: 'granite', name: 'Robinie' },
+    { id: 'slate', name: 'Kastanie' },
+    { id: 'rust', name: 'Akazie' },
+    { id: 'carbon', name: 'Olivenholz' },
+    { id: 'leather', name: 'Ebenholz' }
+
 ];
 
 function Sidebar() {
@@ -44,7 +45,7 @@ function Sidebar() {
     const plateShape = useConfiguratorStore((s) => s.plateShape)
     const thicknessCm = useConfiguratorStore((s) => s.thicknessCm)
     const legType = useConfiguratorStore((s) => s.legType)
-    
+
     // Neuer State für Textur
     const topTexture = useConfiguratorStore((s) => s.topTexture)
 
@@ -242,16 +243,16 @@ function Sidebar() {
                     className="save-btn"
                     onClick={saveConfig}
                 >
-                    {editingId ? "Save as New Copy" : "Save Configuration"}
+                    {editingId ? "Als neue Kopie speichern" : "Konfiguration speichern"}
                 </button>
 
                 {editingId && (
-                    <button 
-                        className="update-btn" 
+                    <button
+                        className="update-btn"
                         onClick={updateConfig}
                         style={{ backgroundColor: '#ff9800', color: 'white', border: 'none', padding: '10px', borderRadius: '4px', cursor: 'pointer' }}
                     >
-                        Save Changes to Existing
+                        Änderungen speichern
                     </button>
                 )}
             </div>
@@ -274,7 +275,7 @@ function ConfiguratorScene() {
                     <Environment preset="city" />
 
                     <OrbitControls />
-                    
+
                     {/* Suspense fängt die Ladezeit der Texturen ab */}
                     <Suspense fallback={null}>
                         <TablePlaceholder />

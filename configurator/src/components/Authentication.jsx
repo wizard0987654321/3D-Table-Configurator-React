@@ -63,13 +63,13 @@ function Authentication() {
     return (
         <div className="auth-page">
             <div className="auth-card">
-                <h1 className="auth-title">Welcome to the Configurator</h1>
-                <h3 className="auth-subtitle">{isRegistering ? 'Create Account' : 'Login'}</h3>
+                <h1 className="auth-title">Willkommen beim Konfigurator</h1>
+                <h3 className="auth-subtitle">{isRegistering ? 'Konto erstellen' : 'Anmelden'}</h3>
                 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <input 
                         type="text" 
-                        placeholder="Username"
+                        placeholder="Benutzername"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
@@ -78,7 +78,7 @@ function Authentication() {
                     
                     <input 
                         type="password" 
-                        placeholder="Password" 
+                        placeholder="Passwort" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -88,17 +88,17 @@ function Authentication() {
                     {error && <div className="auth-error">{error}</div>}
 
                     <button type="submit" className="auth-button">
-                        {isRegistering ? 'Register' : 'Login'}
+                        {isRegistering ? 'Registrieren' : 'Anmelden'}
                     </button>
                 </form>
 
                 <p className="auth-toggle-text">
-                    {isRegistering ? "Already have an account? " : "Don't have an account? "}
+                    {isRegistering ? "Schon ein Konto? " : "Noch kein Konto? "}
                     <span 
                         onClick={() => setIsRegistering(!isRegistering)} 
                         className="auth-toggle-link"
                     >
-                        {isRegistering ? 'Login here' : 'Register here'}
+                        {isRegistering ? 'Hier anmelden' : 'Hier registrieren'}
                     </span>
                 </p>
             </div>

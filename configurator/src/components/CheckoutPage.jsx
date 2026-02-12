@@ -65,7 +65,7 @@ export default function CheckoutPage() {
                 
                 {/* Header with Title and Price */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #334155', paddingBottom: '20px', marginBottom: '24px' }}>
-                    <h1 style={{ margin: 0, fontSize: '1.8rem' }}>Checkout</h1>
+                    <h1 style={{ margin: 0, fontSize: '1.8rem' }}>Kasse</h1>
                     
                     <div style={{ textAlign: 'right' }}>
                         {discountPercent > 0 ? (
@@ -83,19 +83,19 @@ export default function CheckoutPage() {
                     </div>
                 </div>
 
-                <h2 style={{ color: '#94a3b8', fontSize: '1.1rem', marginBottom: '20px' }}>{s.configName || 'Untitled Configuration'}</h2>
+                <h2 style={{ color: '#94a3b8', fontSize: '1.1rem', marginBottom: '20px' }}>{s.configName || 'Unbenannte Konfiguration'}</h2>
 
                 {/* Grid for Configuration Details */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '20px', marginBottom: '24px' }}>
                     {[
-                        { l: 'Width', v: `${s.width} cm` },
-                        { l: 'Depth', v: `${s.depth} cm` },
-                        { l: 'Height', v: `${s.height} cm` },
-                        { l: 'Shape', v: s.plateShape },
-                        { l: 'Leg Type', v: s.legType },
-                        { l: 'Thickness', v: `${s.thicknessCm} cm` },
+                        { l: 'Breite', v: `${s.width} cm` },
+                        { l: 'Tiefe', v: `${s.depth} cm` },
+                        { l: 'Höhe', v: `${s.height} cm` },
+                        { l: 'Form', v: s.plateShape },
+                        { l: 'Bein-Typ', v: s.legType },
+                        { l: 'Stärke', v: `${s.thicknessCm} cm` },
                         { l: 'Material', v: s.topMaterial },
-                        { l: 'Legs', v: s.legMaterial }
+                        { l: 'Beine', v: s.legMaterial }
                     ].map((item, i) => (
                         <div key={i}>
                             <span style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 'bold' }}>{item.l}</span>
@@ -106,7 +106,7 @@ export default function CheckoutPage() {
 
                 {/* Top Color Preview */}
                 <div style={{ marginBottom: '24px' }}>
-                    <span style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 'bold' }}>Top Color</span>
+                    <span style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 'bold' }}>Farbe Tischplatte</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
                         <div style={{ width: 24, height: 24, borderRadius: '50%', background: s.topColor, border: '2px solid #f8fafc' }} />
                         <span style={{ fontSize: '1rem', color: '#e2e8f0', fontWeight: '500' }}>{s.topColor}</span>
@@ -118,7 +118,7 @@ export default function CheckoutPage() {
                     <span style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 'bold' }}>Rabattcode</span>
                     <input 
                         type="text" 
-                        placeholder="Code eingeben"
+                            placeholder="Code eingeben"
                         value={inputCode}
                         onChange={(e) => setInputCode(e.target.value)}
                         style={{ 
@@ -152,7 +152,7 @@ export default function CheckoutPage() {
                                 fontFamily: "'Rubik', sans-serif",
                                 transition: 'background 0.2s'
                             }}
-                        >
+                            >
                             Rabatt anwenden
                         </button>
                         
@@ -171,10 +171,10 @@ export default function CheckoutPage() {
 
                 {/* Final Actions */}
                 <div style={{ display: 'flex', gap: '16px' }}>
-                    <button onClick={() => navigate(-1)} style={{ flex: 1, padding: '14px', borderRadius: '8px', background: 'transparent', color: '#94a3b8', border: '1px solid #334155', cursor: 'pointer', fontFamily: "'Rubik', sans-serif" }}>Back</button>
+                    <button onClick={() => navigate(-1)} style={{ flex: 1, padding: '14px', borderRadius: '8px', background: 'transparent', color: '#94a3b8', border: '1px solid #334155', cursor: 'pointer', fontFamily: "'Rubik', sans-serif" }}>Zurück</button>
                     
                     {/* ADDED ONCLICK HERE */}
-                    <button onClick={handleOrder} style={{ flex: 1, padding: '14px', borderRadius: '8px', background: '#5b8dd9', color: 'white', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontFamily: "'Rubik', sans-serif" }}>Pay Now</button>
+                    <button onClick={handleOrder} style={{ flex: 1, padding: '14px', borderRadius: '8px', background: '#5b8dd9', color: 'white', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontFamily: "'Rubik', sans-serif" }}>Jetzt bezahlen</button>
                 </div>
             </div>
         </div>

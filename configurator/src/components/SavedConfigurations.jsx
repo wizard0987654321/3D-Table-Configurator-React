@@ -97,13 +97,13 @@ export default function SavedConfigurations() {
                                 <p className="date">Gespeichert am: {new Date(config.created_at).toLocaleDateString()}</p>
                                 
                                 <div className="card-actions">
-                                    <button className="edit-btn" onClick={() => handleEdit(config)}>Edit</button>
-                                    <button className="order-btn" onClick={() => handleOrder(config)}>Order</button>
+                                    <button className="edit-btn" onClick={() => handleEdit(config)}>Bearbeiten</button>
+                                    <button className="order-btn" onClick={() => handleOrder(config)}>Bestellen</button>
                                     <button
                                         className="delete-btn"
                                         onClick={() => handleDelete(config.id)}
                                     >
-                                        Delete
+                                        Löschen
                                     </button>
                                 </div>
                             </div>
