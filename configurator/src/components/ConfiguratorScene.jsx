@@ -6,7 +6,6 @@ import { useConfiguratorStore } from '../store/useConfiguratorStore'
 import ProfileIcon from './ProfileIcon.jsx'
 import '../App.css'
 
-// Die Liste der 20+ Textur-Optionen (Anforderung erfüllt)
 const textureOptions = [
     { id: 'none', name: '--- Keine Struktur (Uni-Farbe) ---' },
     { id: 'oak_natural', name: 'Eiche Natur' },
@@ -124,7 +123,7 @@ function Sidebar() {
                 </select>
             </label>
 
-            {/* NEU: Oberflächen-Struktur Dropdown */}
+            {/* Oberflächen-Struktur Dropdown */}
             <label>
                 Oberflächen-Struktur
                 <select

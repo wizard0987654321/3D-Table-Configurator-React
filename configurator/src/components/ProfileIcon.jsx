@@ -5,17 +5,17 @@ export default function ProfileIcon() {
     const navigate = useNavigate();
 
     return (
-        <div    style={{
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            color: 'red'
-        }}>
-            <h2>Profile Icon Placeholder</h2>
-            <img src={profileSvg} 
-                 alt="Profile Icon" 
-                 width="50" height="50" 
-                 onClick={() => navigate("/saved-configurations")}/>
+        <div
+            role="button"
+            onClick={() => navigate('/saved-configurations')}
+            style={{
+                position: 'fixed', top: '20px', right: '20px', zIndex: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '48px', height: '48px', borderRadius: '50%',
+                background: '#fff', border: '3px solid #272b35', cursor: 'pointer'
+            }}
+        >
+            <img src={profileSvg} alt="" style={{ width: '24px' }} />
         </div>
-    )
+    );
 }

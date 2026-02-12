@@ -33,8 +33,6 @@ pool.connect((err, client, release) => {
 });
 
 // 2. Automatic Table Creation Logic
-// This runs every time the server starts. If your colleague doesn't have the tables,
-// they will be created automatically before he even clicks "Save".
 const createTables = async () => {
     try {
         // Create Users Table
@@ -46,7 +44,7 @@ const createTables = async () => {
             );
         `);
 
-        // Create Configurations Table with all columns
+        // Create Configurations Table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS configurations (
                 id SERIAL PRIMARY KEY,
@@ -63,11 +61,35 @@ const createTables = async () => {
                 thickness_cm INTEGER,
                 leg_type VARCHAR(50),
                 total_price INTEGER,
+                top_texture VARCHAR(50), 
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
 
-        console.log("✅ Database tables are ready.");
+        // --- NEW: Create Discount Codes Table ---
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS discount_codes (
+                id SERIAL PRIMARY KEY,
+                code VARCHAR(50) UNIQUE NOT NULL,
+                discount_percent INTEGER NOT NULL
+            );
+        `);
+
+        // --- NEW: Insert Default Codes (if they don't exist) ---
+        const codesToInsert = [
+            { code: 'rabatt10', percent: 10 },
+            { code: 'rabattCode', percent: 10 },
+            { code: 'minus10', percent: 10 }
+        ];
+
+        for (const c of codesToInsert) {
+            await pool.query(
+                `INSERT INTO discount_codes (code, discount_percent) VALUES ($1, $2) ON CONFLICT (code) DO NOTHING`,
+                [c.code, c.percent]
+            );
+        }
+
+        console.log("✅ Database tables and discount codes are ready.");
     } catch (err) {
         console.error("❌ Error during table creation:", err);
     }
@@ -117,10 +139,10 @@ app.post('/api/login', async (req, res) => {
 // SAVE CONFIGURATION Endpoint
 app.post('/api/save-config', async (req, res) => {
     const { 
-    userId, configName, topColor, legColor, topMaterial, 
-    legMaterial, width, height, depth, plateShape, 
-    thicknessCm, legType, totalPrice, topTexture // <--- ADD THIS
-} = req.body;
+        userId, configName, topColor, legColor, topMaterial, 
+        legMaterial, width, height, depth, plateShape, 
+        thicknessCm, legType, totalPrice, topTexture 
+    } = req.body;
 
     const sql = `
     INSERT INTO configurations (
@@ -130,7 +152,7 @@ app.post('/api/save-config', async (req, res) => {
     ) 
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) 
     RETURNING id
-`;
+    `;
 
     const values = [
         userId, configName, topColor, legColor, topMaterial, 
@@ -147,8 +169,9 @@ app.post('/api/save-config', async (req, res) => {
     }
 });
 
+// GET USER CONFIGS
 app.get('/api/user-configs/:userId', async (req, res) => {
-    const { userId } = req.params; // This grabs the "1" from the URL
+    const { userId } = req.params;
 
     try {
         const sql = `
@@ -157,8 +180,6 @@ app.get('/api/user-configs/:userId', async (req, res) => {
             ORDER BY created_at DESC
         `;
         const result = await pool.query(sql, [userId]);
-        
-        // Even if the list is empty, we send an empty array []
         res.json(result.rows); 
     } catch (err) {
         console.error("Database Error:", err);
@@ -166,6 +187,7 @@ app.get('/api/user-configs/:userId', async (req, res) => {
     }
 });
 
+// DELETE CONFIG
 app.delete('/api/delete-config/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -182,12 +204,13 @@ app.delete('/api/delete-config/:id', async (req, res) => {
     }
 });
 
+// UPDATE CONFIG
 app.put('/api/update-config/:id', async (req, res) => {
     const { id } = req.params;
     const { 
-    configName, topColor, legColor, topMaterial, legMaterial, 
-    width, height, depth, plateShape, thicknessCm, legType, totalPrice, topTexture // <--- ADD THIS
-} = req.body;
+        configName, topColor, legColor, topMaterial, legMaterial, 
+        width, height, depth, plateShape, thicknessCm, legType, totalPrice, topTexture 
+    } = req.body;
 
     const sql = `
     UPDATE configurations 
@@ -195,16 +218,36 @@ app.put('/api/update-config/:id', async (req, res) => {
         leg_material = $5, width = $6, height = $7, depth = $8, 
         plate_shape = $9, thickness_cm = $10, leg_type = $11, total_price = $12, top_texture = $13
     WHERE id = $14
-`;
+    `;
 
     try {
         await pool.query(sql, [
-    configName, topColor, legColor, topMaterial, legMaterial, 
-    width, height, depth, plateShape, thicknessCm, legType, totalPrice, topTexture, id
-]);
+            configName, topColor, legColor, topMaterial, legMaterial, 
+            width, height, depth, plateShape, thicknessCm, legType, totalPrice, topTexture, id
+        ]);
         res.json({ message: "Updated successfully" });
     } catch (err) {
         res.status(500).json({ error: "Update failed" });
+    }
+});
+
+// --- NEW ENDPOINT: VALIDATE DISCOUNT CODE ---
+app.post('/api/validate-code', async (req, res) => {
+    const { code } = req.body;
+    try {
+        // Query database for the code
+        const result = await pool.query('SELECT * FROM discount_codes WHERE code = $1', [code]);
+        
+        if (result.rows.length > 0) {
+            // Code found, send back the discount percent
+            res.json({ valid: true, percent: result.rows[0].discount_percent });
+        } else {
+            // Code not found
+            res.status(404).json({ valid: false, error: "Invalid code" });
+        }
+    } catch (err) {
+        console.error("Validation Error:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfiguratorStore } from '../store/useConfiguratorStore';
+import '../App.css';
 
 export default function SavedConfigurations() {
     const navigate = useNavigate();
@@ -39,8 +40,13 @@ export default function SavedConfigurations() {
     }
 
     function handleOrder(config) {
-        navigate('/checkout');
-    }
+    // save to browser storage, afer reload
+    localStorage.setItem('checkoutConfig', JSON.stringify(config));
+    
+    // load into store, before reload
+    loadConfig(config); 
+    navigate('/checkout');
+}
 
     async function handleDelete(configId) {
         if (!window.confirm("Möchten Sie diese Konfiguration wirklich löschen?")) return;
@@ -64,8 +70,8 @@ export default function SavedConfigurations() {
 
     // The return must be outside of all other functions
     return (
-        <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '40px' }}>
+        <div className="saved-page">
+            <div className="saved-header">
                 <h2>Meine gespeicherten Tische</h2>
                 <button onClick={() => { reset(); navigate('/design') }} className="back-btn">
                     + Neuer Tisch
@@ -73,9 +79,9 @@ export default function SavedConfigurations() {
             </div>
 
             {loading ? (
-                <p>Lädt...</p>
+                <p className="saved-status">Lädt...</p>
             ) : configs.length === 0 ? (
-                <p>Noch keine Tische gespeichert.</p>
+                <p className="saved-status">Noch keine Tische gespeichert.</p>
             ) : (
                 <div className="config-grid">
                     {configs.map((config) => (
@@ -90,7 +96,7 @@ export default function SavedConfigurations() {
                                 <p><strong>Maße:</strong> {config.width}x{config.depth} cm</p>
                                 <p className="date">Gespeichert am: {new Date(config.created_at).toLocaleDateString()}</p>
                                 
-                                <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+                                <div className="card-actions">
                                     <button className="edit-btn" onClick={() => handleEdit(config)}>Edit</button>
                                     <button className="order-btn" onClick={() => handleOrder(config)}>Order</button>
                                     <button

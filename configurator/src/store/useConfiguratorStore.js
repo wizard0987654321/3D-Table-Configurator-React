@@ -5,7 +5,7 @@ export const useConfiguratorStore = create((set, get) => ({
     editingId: null,
 
     // 1. State: Colors & Materials
-    topColor: '#6c8bff',
+    topColor: '#d4c4a8',
     legColor: '#555555',
     topMaterial: 'wood',
     legMaterial: 'metal',

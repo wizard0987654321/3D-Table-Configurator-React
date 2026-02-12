@@ -61,28 +61,19 @@ function Authentication() {
 
     // JSX for the component
     return (
-        <div style={{ padding: '50px', textAlign: 'center' }}>
-            <h1>Welcome to the Configurator</h1>
-            
-            <div style={{ 
-                border: '1px solid #ccc', 
-                padding: '30px', 
-                margin: '20px auto', 
-                maxWidth: '350px',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-            }}>
-                <h3>{isRegistering ? 'Create Account' : 'Login'}</h3>
+        <div className="auth-page">
+            <div className="auth-card">
+                <h1 className="auth-title">Welcome to the Configurator</h1>
+                <h3 className="auth-subtitle">{isRegistering ? 'Create Account' : 'Login'}</h3>
                 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    
+                <form onSubmit={handleSubmit} className="auth-form">
                     <input 
                         type="text" 
                         placeholder="Username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        style={{ padding: '10px', fontSize: '16px' }}
+                        className="auth-input"
                     />
                     
                     <input 
@@ -91,29 +82,21 @@ function Authentication() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{ padding: '10px', fontSize: '16px' }}
+                        className="auth-input"
                     />
 
-                    {error && <div style={{ color: 'red', fontSize: '14px' }}>{error}</div>}
+                    {error && <div className="auth-error">{error}</div>}
 
-                    <button type="submit" style={{ 
-                        padding: '10px', 
-                        cursor: 'pointer', 
-                        backgroundColor: '#007bff', 
-                        color: 'white', 
-                        border: 'none',
-                        borderRadius: '4px',
-                        fontSize: '16px'
-                    }}>
+                    <button type="submit" className="auth-button">
                         {isRegistering ? 'Register' : 'Login'}
                     </button>
                 </form>
 
-                <p style={{ marginTop: '20px', fontSize: '14px' }}>
+                <p className="auth-toggle-text">
                     {isRegistering ? "Already have an account? " : "Don't have an account? "}
                     <span 
                         onClick={() => setIsRegistering(!isRegistering)} 
-                        style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
+                        className="auth-toggle-link"
                     >
                         {isRegistering ? 'Login here' : 'Register here'}
                     </span>
