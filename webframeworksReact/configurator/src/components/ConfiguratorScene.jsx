@@ -2,7 +2,7 @@ import { Suspense } from 'react' // Wichtig für das Laden von Texturen
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
 import TablePlaceholder from './Tableplaceholder.jsx'
-import { useConfiguratorStore } from '../store/useConfiguratorStore'
+import { useConfiguratorStore } from '../store/useConfiguratorStore.js'
 import ProfileIcon from './ProfileIcon.jsx'
 import '../App.css'
 
