@@ -46,7 +46,6 @@ function Sidebar() {
     const thicknessCm = useConfiguratorStore((s) => s.thicknessCm)
     const legType = useConfiguratorStore((s) => s.legType)
 
-    // Neuer State für Textur
     const topTexture = useConfiguratorStore((s) => s.topTexture)
 
     const configName = useConfiguratorStore((s) => s.configName);
