@@ -4,7 +4,7 @@ node_modules/
 
 # 2. Security / Secrets
 # NEVER upload this. This contains your passwords.
-.env
+
 
 # 3. Logs
 # Error logs that appear when things crash. We don't need these in Git.

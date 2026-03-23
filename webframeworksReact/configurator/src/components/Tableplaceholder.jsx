@@ -18,24 +18,20 @@ function TablePlaceholder() {
 
     // --- DYNAMIC TEXTURE LOADING ---
     
-    // 1. Determine the filename
     // If 'none' is selected, we fallback to 'placeholder' to keep the hook running safely.
     // If 'oak_natural' is selected, we load 'oak_natural'
     const textureFile = topTexture === 'none' ? 'placeholder' : topTexture;
 
-    // 2. Load the specific file
-    // IMPORTANT: Make sure your files in /public/textures/ are named exactly like the IDs!
-    // Example: public/textures/oak_natural.jpg
+    
     const texture = useTexture(`/textures/${textureFile}.jpg`);
 
-    // 3. Configure texture settings
     useEffect(() => {
         if (texture) {
             texture.wrapS = texture.wrapT = RepeatWrapping;
             texture.repeat.set(1, 1);
-            // Optional: If textures look blurry, try: texture.anisotropy = 16;
         }
-    }, [texture]); // This runs every time the texture file changes
+    }, [texture]); 
+    // This runs every time the texture file changes
 
     // --- DIMENSIONS ---
     const baseW = 120;
