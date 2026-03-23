@@ -5,24 +5,26 @@ Instructions to run locally
 
 ### 1. Prerequisites
 * Install [Node.js](https://nodejs.org/)
-* Install [PostgreSQL](https://www.postgresql.org/)
+* Install [Git](https://git-scm.com/)
 
-### 2. Database Setup
-1. Open your PostgreSQL tool (pgAdmin or psql).
-2. Create a new database named `configurator_db`.
-3. (Optional) The tables will be created automatically when the backend starts.
+### 2. Clone the Repository
+1. Clone the project from GitLab:
+   ```bash
+   git clone https://git.thm.de/asmh41/webframeworks.git
+   cd webframeworks/webframeworksReact
+   ```
+2. The `.env` file is already included in the repository for testing purposes — no need to create it manually.
 
 ### 3. Backend Setup
 1. Navigate to the `backend` folder: `cd backend`
 2. Install dependencies: `npm install`
-3. Create a `.env` file in the `backend` folder and add your credentials:
-   ```env
-   DB_USER=postgres
-   DB_HOST=localhost
-   DB_NAME=configurator_db
-   DB_PASSWORD=YOUR_POSTGRES_PASSWORD
-   DB_PORT=5432
-   PORT=3000
+3. The `.env` file is already included in the repository — it contains the necessary database configuration for local development.
+4. Start the backend server: `npm start`
+
+### 4. Frontend Setup
+1. Navigate to the `configurator` folder: `cd ../configurator`
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run dev`
 
 ## Intro
 
