@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export const useConfiguratorStore = create((set, get) => ({
     // id to identify if we are in editing mode
     editingId: null,
@@ -75,7 +77,7 @@ export const useConfiguratorStore = create((set, get) => ({
         };
 
         try {
-            const response = await fetch('http://localhost:3000/api/save-config', {
+            const response = await fetch(`${apiBase}/api/save-config`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload), 
@@ -147,7 +149,7 @@ updateConfiguration: async () => {
         };
 
         try {
-            const response = await fetch(`http://localhost:3000/api/update-config/${state.editingId}`, {
+            const response = await fetch(`${apiBase}/api/update-config/${state.editingId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),

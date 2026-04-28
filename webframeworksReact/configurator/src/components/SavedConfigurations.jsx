@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useConfiguratorStore } from '../store/useConfiguratorStore';
 import '../App.css';
 
+const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function SavedConfigurations() {
     const navigate = useNavigate();
     const loadConfig = useConfiguratorStore((s) => s.loadConfiguration);
@@ -21,7 +23,7 @@ export default function SavedConfigurations() {
 
         const fetchConfigs = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/user-configs/${userId}`);
+                const response = await fetch(`${apiBase}/api/user-configs/${userId}`);
                 const data = await response.json();
                 setConfigs(data);
             } catch (error) {
@@ -52,7 +54,7 @@ export default function SavedConfigurations() {
         if (!window.confirm("Möchten Sie diese Konfiguration wirklich löschen?")) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/api/delete-config/${configId}`, {
+            const response = await fetch(`${apiBase}/api/delete-config/${configId}`, {
                 method: 'DELETE',
             });
 

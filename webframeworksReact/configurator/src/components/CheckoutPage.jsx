@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfiguratorStore } from '../store/useConfiguratorStore';
 
+const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function CheckoutPage() {
     const navigate = useNavigate();
     const s = useConfiguratorStore();
@@ -31,7 +33,7 @@ export default function CheckoutPage() {
         if (!inputCode) return;
 
         try {
-            const response = await fetch('http://localhost:3000/api/validate-code', {
+            const response = await fetch(`${apiBase}/api/validate-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code: inputCode })

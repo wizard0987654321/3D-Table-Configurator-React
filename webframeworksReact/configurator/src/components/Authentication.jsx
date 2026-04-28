@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 function Authentication() {
 
     // to change route
@@ -22,7 +24,7 @@ function Authentication() {
 
         // ternary operator to choose endpoint based on mode
         const endpoint = isRegistering ? '/api/register' : '/api/login';
-        const url = `http://localhost:3000${endpoint}`;
+        const url = `${apiBase}${endpoint}`;
 
         // for both, register and login, send username and password as a request
         try {
