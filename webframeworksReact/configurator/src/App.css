@@ -418,10 +418,23 @@ small {
   background: rgba(110, 172, 218, 0.2);
 }
 
+.auth-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .auth-error {
   color: #ff6b6b;
   font-size: 0.85rem;
   background: rgba(255, 107, 107, 0.1);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.auth-loading {
+  color: rgba(226, 226, 182, 0.85);
+  font-size: 0.85rem;
+  background: rgba(110, 172, 218, 0.12);
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
 }
@@ -437,6 +450,11 @@ small {
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
   margin-top: 0.25rem;
+}
+
+.auth-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .auth-button:hover {
@@ -459,6 +477,13 @@ small {
   text-decoration: underline;
   font-weight: 500;
   transition: color 0.2s;
+}
+
+.auth-toggle-link--disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+  text-decoration: none;
 }
 
 .auth-toggle-link:hover {
